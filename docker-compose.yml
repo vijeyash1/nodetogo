@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  postgresd:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=core
+      - POSTGRES_PASSWORD=core
+      - POSTGRES_DB=core
+    networks:
+      - intranet
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: "no"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=core@example.com
+      - PGADMIN_DEFAULT_PASSWORD=core
+    ports:
+      - "5433:80"
+    networks:
+      - intranet
+
+
+networks:
+  intranet:
+volumes:
+  pgadmin:
+    name: vol-pgadmin
