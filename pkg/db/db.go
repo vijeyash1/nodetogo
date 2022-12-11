@@ -36,12 +36,18 @@ func Init() {
 	if err != nil {
 		log.Fatal("unable to open database connection: ", err)
 	}
-	db.Migrator().HasTable(&models.Datasource{})
-	db.Migrator().DropTable(&models.Datasource{})
-	db.Migrator().HasTable(&models.Dashboard{})
-	db.Migrator().DropTable(&models.Dashboard{})
-	db.Migrator().HasTable(&models.Node{})
-	db.Migrator().DropTable(&models.Node{})
+	if ok := db.Migrator().HasTable(&models.Datasource{}); ok {
+		db.Migrator().DropTable(&models.Datasource{})
+	}
+
+	if ok := db.Migrator().HasTable(&models.Dashboard{}); ok {
+		db.Migrator().DropTable(&models.Dashboard{})
+	}
+
+	if ok := db.Migrator().HasTable(&models.Node{}); ok {
+		db.Migrator().DropTable(&models.Node{})
+	}
+
 	err = db.AutoMigrate(&models.Datasource{}, &models.Dashboard{}, &models.Node{})
 	if err != nil {
 		fmt.Println(err)
